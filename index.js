@@ -39,6 +39,7 @@ export default class LayoutTester extends Component {
             mode: PropTypes.string.isRequired,
             width: PropTypes.number.isRequired,
             height: PropTypes.number.isRequired,
+            exportScaling: PropTypes.string.isRequired,
             portrait: PropTypes.bool,
         }),
         viewportChanged: PropTypes.func
@@ -50,56 +51,67 @@ export default class LayoutTester extends Component {
                 label: "13 Pro Max, 12 Pro Max",
                 width: 428,
                 height: 926,
+                exportScaling: "@3x",
             },
             iphone12: {
                 label: "13, 13 Pro, 12, 12 Pro",
                 width: 390,
                 height: 844,
+                exportScaling: "@3x",
             },
             iphone12mini: {
                 label: "13 Mini, 12 Mini",
                 width: 360,
                 height: 780,
+                exportScaling: "@3x",
             },
             iphoneXSMax: {
                 label: "11 Pro Max, XS Max",
                 width: 414,
                 height: 896,
+                exportScaling: "@3x",
             },
             iphoneXS: {
                 label: "11 Pro, X, XS",
                 width: 375,
                 height: 812,
+                exportScaling: "@3x",
             },
             iphoneXR: {
                 label: "11, XR",
                 width: 414,
                 height: 896,
+                exportScaling: "@2x",
             },
             iphone6plus: {
                 label: "6+, 6S+, 7+, 8+",
                 width: 414,
                 height: 736,
+                exportScaling: "@3x*",
             },
             iphone6: {
                 label: "6, 6s, 7, 8",
                 width: 375,
                 height: 667,
+                exportScaling: "@2x",
             },
             iphone5: {
                 label: "5, 5s, 5c, SE",
                 width: 320,
                 height: 568,
+                exportScaling: "@2x",
             },
             iphone4: {
                 label: "4, 4s",
                 width: 320,
                 height: 480,
+                exportScaling: "@2x",
             },
             iphone3: {
                 label: "1, 2, 3",
                 width: 320,
                 height: 480,
+                exportScaling: "@1x",
             },
         }
     };
@@ -108,14 +120,15 @@ export default class LayoutTester extends Component {
         super(props);
         if (props.noTestWrapConfig) {
             let deviceDimensions = Dimensions.get("window");
-            let { mode, width, height, portrait } = props.noTestWrapConfig;
+            let { mode, width, height, portrait, exportScaling } = props.noTestWrapConfig;
             if (!mode) mode = 'default';
             if (!width) width = deviceDimensions.width;
             if (!height) height = deviceDimensions.height;
+            if (!exportScaling) exportScaling = deviceDimensions.exportScaling;
             portrait = width <= height;
             this.state = {
                 mode,
-                viewport: { width, height },
+                viewport: { width, height, exportScaling},
                 portrait: portrait
             };
         } else {
@@ -133,11 +146,12 @@ export default class LayoutTester extends Component {
             return;
         }
 
-        let { mode, width, height, portrait } = nextProps.noTestWrapConfig;
+        let { mode, width, height, portrait, exportScaling } = nextProps.noTestWrapConfig;
         this.setDefaultConfig(mode, {
             width,
             height,
-            portrait
+            portrait,
+            exportScaling,
         });
     }
 
@@ -154,7 +168,8 @@ export default class LayoutTester extends Component {
             mode: mode,
             viewport: {
                 height: config.height,
-                width: config.width
+                width: config.width,
+                exportScaling: config.exportScaling,
             },
             portrait: config.portrait || this.state.portrait
         };
@@ -165,12 +180,12 @@ export default class LayoutTester extends Component {
         if (this.state.mode === mode && this.state.portrait === portrait) {
             return;
         }
-        let { height, width } = this.props.config[mode];
-        let viewport = portrait ? { height, width } : { height: width, width: height };
+        let { height, width, exportScaling } = this.props.config[mode];
+        let viewport = portrait ? { height, width, exportScaling } : { height: width, width: height, exportScaling };
         let newState = {
             mode,
             viewport,
-            portrait
+            portrait,
         };
         this.setState(newState, () => {
             if (this.props.viewportChanged) {
@@ -212,7 +227,7 @@ export default class LayoutTester extends Component {
                     <View style={ [ styles.viewport, viewport ] }>
                         { this.props.children }
                     </View>
-                    <Text style={ styles.subTitle }>{ `(${viewport.width}x${viewport.height})` }</Text>
+                    <Text style={ styles.subTitle }>{ `(${viewport.width}x${viewport.height}) ${viewport.exportScaling}` }</Text>
                 </View>
                 <View style={ styles.buttons }>
                     <TouchableOpacity onPress={ () => this.handleRotate() }>
