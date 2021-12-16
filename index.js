@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import {
     Dimensions,
+    FlatList,
     Text,
     TouchableOpacity,
     View
@@ -11,6 +12,21 @@ import LayoutProvider, { getLayout } from 'react-native-layout-provider';
 import styles from "./styles";
 
 export { getLayout }
+
+
+const ModeButtonItem = ({ mode, modeData, selected:selectedMode, callback }) => {
+  let selected = selectedMode === mode ? styles.selectedButton : {};
+  console.log(`rendering ${JSON.stringify(mode)}`);
+  return (
+    <TouchableOpacity
+      style={{
+        height: "100%",
+      }}
+      onPress={ ()=> callback(mode) }>
+      <Text style={ [ styles.button, selected ] }>{ `${modeData.label}` }</Text>
+    </TouchableOpacity>
+  );
+}
 
 export default class LayoutTester extends Component {
 
@@ -167,30 +183,31 @@ export default class LayoutTester extends Component {
         this.handleSelection(this.state.mode, !this.state.portrait);
     }
 
-    renderButton(mode) {
-        let deviceSize = this.props.config[mode];
-        let selected = this.state.mode === mode ? styles.selectedButton : {};
-        return (
-            <TouchableOpacity onPress={ ()=> this.handleSelection(mode, this.state.portrait) }>
-                <Text style={ [ styles.button, selected ] }>{ `${this.props.config[mode].label}` }</Text>
-            </TouchableOpacity>
-        );
-    }
-
     renderLayoutTester() {
         let { viewport } = this.state;
-        let buttons = Object.keys(this.props.config).map(k => {
-            return (
-                <View key={ k }>
-                    { this.renderButton(k) }
-                </View>
-            );
-        });
         return (
             <View style={ [ styles.container ] }>
-                <View style={ styles.buttons }>
-                    { buttons }
-                </View>
+                <FlatList
+                  testID="mode-buttons"
+                  horizontal
+                  style={{
+                    height: 120,
+                    width: "100%",
+                  }}
+                  data={Object.keys(this.props.config)}
+                  renderItem={({item}) => { return (
+                      <ModeButtonItem
+                        mode={item}
+                        modeData={this.props.config[item]}
+                        selected={this.state.mode}
+                        callback={
+                          (mode) => this.handleSelection(mode, this.state.portrait)
+                        }
+                      />
+                    );
+                  }}
+                  keyExtractor={(item) => item}
+                />
                 <View style={ styles.body }>
                     <View style={ [ styles.viewport, viewport ] }>
                         { this.props.children }

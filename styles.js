@@ -5,11 +5,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start",
         alignItems: "center",
-        backgroundColor: "#669999"
+        backgroundColor: "#669999",
+        width:"100%",
     },
     buttons: {
         // flex: 0.15,
-        flexDirection: "row",
         alignItems: "center",
         marginVertical: 20
     },
