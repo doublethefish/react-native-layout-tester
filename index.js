@@ -30,21 +30,61 @@ export default class LayoutTester extends Component {
 
     static defaultProps = {
         config: {
-            iphone5: {
-                label: "iPhone 5",
-                width: 320,
-                height: 568
+            iphone12Max: {
+                label: "13 Pro Max, 12 Pro Max",
+                width: 428,
+                height: 926,
             },
-            iphone6: {
-                label: "iPhone 6",
+            iphone12: {
+                label: "13, 13 Pro, 12, 12 Pro",
+                width: 390,
+                height: 844,
+            },
+            iphone12mini: {
+                label: "13 Mini, 12 Mini",
+                width: 360,
+                height: 780,
+            },
+            iphoneXSMax: {
+                label: "11 Pro Max, XS Max",
+                width: 414,
+                height: 896,
+            },
+            iphoneXS: {
+                label: "11 Pro, X, XS",
                 width: 375,
-                height: 667
+                height: 812,
+            },
+            iphoneXR: {
+                label: "11, XR",
+                width: 414,
+                height: 896,
             },
             iphone6plus: {
-                label: "iPhone 6+",
+                label: "6+, 6S+, 7+, 8+",
                 width: 414,
-                height: 736
-            }
+                height: 736,
+            },
+            iphone6: {
+                label: "6, 6s, 7, 8",
+                width: 375,
+                height: 667,
+            },
+            iphone5: {
+                label: "5, 5s, 5c, SE",
+                width: 320,
+                height: 568,
+            },
+            iphone4: {
+                label: "4, 4s",
+                width: 320,
+                height: 480,
+            },
+            iphone3: {
+                label: "1, 2, 3",
+                width: 320,
+                height: 480,
+            },
         }
     };
 
