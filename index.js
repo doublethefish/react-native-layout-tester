@@ -136,7 +136,7 @@ export default class LayoutTester extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (shallowEqual(this.props.noTestWrapConfig, nextProps.noTestWrapConfig)) return;
 
         if (!nextProps.noTestWrapConfig) {
@@ -155,7 +155,7 @@ export default class LayoutTester extends Component {
         });
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         if (this.props.noTestWrapConfig) return;
 
         let config = this.props.config;
