@@ -221,7 +221,7 @@ export default class LayoutTester extends Component {
                       />
                     );
                   }}
-                  keyExtractor={(item) => item}
+                  keyExtractor={(item) => item.label}
                 />
                 <View style={ styles.body }>
                     <View style={ [ styles.viewport, viewport ] }>
