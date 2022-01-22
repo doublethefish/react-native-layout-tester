@@ -9,7 +9,7 @@
   "author": "Gustavo Machado (machadogj@gmail.com)",
   "license": "MIT",
   "dependencies": {
-    "react-native-layout-provider": "^1.0.0",
+    "react-native-layout-provider": "https://github.com/doublethefish/react-native-layout-provider.git#chore/workaround_deprecation_warning",
     "shallowequal": "^0.2.2"
   }
 }
