@@ -16,7 +16,6 @@ export { getLayout }
 
 const ModeButtonItem = ({ mode, modeData, selected:selectedMode, callback }) => {
   let selected = selectedMode === mode ? styles.selectedButton : {};
-  console.log(`rendering ${JSON.stringify(mode)}`);
   return (
     <TouchableOpacity
       style={{
@@ -200,6 +199,17 @@ export default class LayoutTester extends Component {
 
     renderLayoutTester() {
         let { viewport } = this.state;
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+          }
+
+        // usage example:
+        const uniqueListOfComponents = Object.keys(this.props.config).filter(onlyUnique);
+        const duplicatedElements = Object.keys(this.props.config).length - uniqueListOfComponents.length;
+        if (duplicatedElements>0) {
+            console.error(`there are ${duplicatedElements} repeated elements in the config ${Object.keys(this.props.config).sort()}`);
+        }
+
         return (
             <View style={ [ styles.container ] }>
                 <FlatList
@@ -209,11 +219,14 @@ export default class LayoutTester extends Component {
                     height: 120,
                     width: "100%",
                   }}
-                  data={Object.keys(this.props.config)}
-                  renderItem={({item}) => { return (
+                  data={uniqueListOfComponents}
+                  renderItem={({item/*componentName*/, index}) => {
+                    const itemData = this.props.config[item];
+                    return (
                       <ModeButtonItem
                         mode={item}
-                        modeData={this.props.config[item]}
+                        key={item}
+                        modeData={itemData}
                         selected={this.state.mode}
                         callback={
                           (mode) => this.handleSelection(mode, this.state.portrait)
@@ -221,7 +234,7 @@ export default class LayoutTester extends Component {
                       />
                     );
                   }}
-                  keyExtractor={(item) => item.label}
+                  keyExtractor={(item) => item}
                 />
                 <View style={ styles.body }>
                     <View style={ [ styles.viewport, viewport ] }>
